@@ -1,0 +1,6 @@
+{
+  "name": "PNG AI Generator",
+  "description": "Generate high-quality transparent PNG images and upscale existing images using AI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
