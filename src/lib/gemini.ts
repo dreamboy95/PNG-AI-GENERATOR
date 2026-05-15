@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { GoogleGenAI } from "@google/genai";
 
 // Dynamic init right before API call
@@ -40,7 +41,7 @@ export async function testGeminiConnection(apiKeyToTest: string): Promise<boolea
     const ai = new GoogleGenAI({ apiKey: key });
     // Make a lightweight call to verify the key
     await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       contents: 'test'
     });
     return true;
@@ -218,4 +219,34 @@ export async function editImageFromPrompt(
       throw e;
     }
   }
+}
+
+export async function describeImage(
+  base64Image: string,
+  mimeType: string
+): Promise<string> {
+  const ai = getAiClient();
+  const pureBase64 = base64Image.split(',')[1] || base64Image;
+
+  const prompt = "Describe this image in detail to create a high-quality prompt for an AI image generator. Focus on composition, colors, lightning, style, and specific subjects. Keep it descriptive but concise enough to be used as a prompt.";
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-3-flash-preview',
+    contents: {
+      parts: [
+        {
+          inlineData: {
+            data: pureBase64,
+            mimeType: mimeType,
+          },
+        },
+        { text: prompt },
+      ],
+    },
+  });
+
+  const text = response.text;
+  if (!text) throw new Error("Could not extract description from image.");
+  
+  return text;
 }

@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { GenerateSection } from './components/GenerateSection';
 import { UpscaleSection } from './components/UpscaleSection';
 import { ApiSettings } from './components/ApiSettings';
-import { ScissorsLineDashed, Wand2, ArrowUpRight, History, Download, Settings } from 'lucide-react';
+import { BulkGenerateSection } from './components/BulkGenerateSection';
+import { ImageToPromptSection } from './components/ImageToPromptSection';
+import { ScissorsLineDashed, Wand2, ArrowUpRight, History, Download, Settings, FileText, ImageIcon } from 'lucide-react';
 import { cn } from './lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
-type Tab = 'generate' | 'upscale' | 'settings';
+type Tab = 'generate' | 'upscale' | 'bulk' | 'prompt' | 'settings';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('generate');
@@ -26,7 +28,9 @@ export default function App() {
           </div>
           
           <div className="flex gap-1 bg-slate-100 p-1 rounded-full">
-            <NavTab label="Generate" active={activeTab === 'generate'} onClick={() => setActiveTab('generate')} />
+            <NavTab label="Single Prompts" active={activeTab === 'generate'} onClick={() => setActiveTab('generate')} />
+            <NavTab label="Bulk Upload" active={activeTab === 'bulk'} onClick={() => setActiveTab('bulk')} />
+            <NavTab label="Image To Prompt" active={activeTab === 'prompt'} onClick={() => setActiveTab('prompt')} />
             <NavTab label="Upscale" active={activeTab === 'upscale'} onClick={() => setActiveTab('upscale')} />
             <NavTab label="API Settings" active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} />
           </div>
@@ -51,6 +55,8 @@ export default function App() {
               className="w-full h-full"
             >
               {activeTab === 'generate' && <GenerateSection />}
+              {activeTab === 'bulk' && <BulkGenerateSection />}
+              {activeTab === 'prompt' && <ImageToPromptSection />}
               {activeTab === 'upscale' && <UpscaleSection />}
               {activeTab === 'settings' && <ApiSettings />}
             </motion.div>
